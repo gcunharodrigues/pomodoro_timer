@@ -1,0 +1,9 @@
+# No external dependencies required for basic functionality
+# Built-in libraries used:
+# - tkinter
+# - json
+# - time
+# - datetime
+# - winsound (Windows only)
+
+pyinstaller==6.4.0
