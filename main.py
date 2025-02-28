@@ -70,7 +70,7 @@ class PomodoroApp:
         # Session info (update row number)
         self.session_label = ttk.Label(
             main_frame,
-            text="Work Session 1",
+            text=f"Work Session {self.current_session}",
             font=("Arial", 12)
         )
         self.session_label.grid(row=2, column=0, columnspan=2, pady=5)
@@ -167,9 +167,9 @@ class PomodoroApp:
 
     def reset_timer(self):
         self.running = False
-        self.current_session = 0
+        self.current_session = 1
         self.time_left = self.config["work_duration"] * 60
-        self.session_label.config(text="Work Session 1")
+        self.session_label.config(text=f"Work Session {self.current_session}")
         self.start_button.config(text="Start")
         self.update_timer_display()
         if self.timer_id:
@@ -198,16 +198,20 @@ class PomodoroApp:
         def save_settings():
             try:
                 for key, entry in entries.items():
-                    if key == "notification_sound":
-                        self.config[key] = entry.get().lower() == "true"
+                    value = entry.get()
+                    if key == "notification_sound" or key == "auto_start":
+                        # Handle boolean values
+                        self.config[key] = value.lower() == "true"
                     else:
-                        self.config[key] = int(entry.get())
+                        # Handle integer values
+                        self.config[key] = int(value)
                 self.save_config()
                 self.reset_timer()
                 settings_window.destroy()
                 messagebox.showinfo("Success", "Settings saved!")
             except ValueError:
-                messagebox.showerror("Error", "Please enter valid numbers")
+                messagebox.showerror(
+                    "Error", "Please enter valid values (numbers for durations, true/false for checkboxes)")
 
         ttk.Button(frame, text="Save", command=save_settings).grid(
             row=row, column=0, columnspan=2, pady=20)
