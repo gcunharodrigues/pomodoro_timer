@@ -1,10 +1,11 @@
+#!/usr/bin/env python3
 import tkinter as tk
 from tkinter import ttk
 import json
 import time
 from datetime import datetime, timedelta
 from tkinter import messagebox
-import winsound
+import os  # Added for macOS sound support
 
 
 class PomodoroApp:
@@ -138,7 +139,11 @@ class PomodoroApp:
 
     def timer_completed(self):
         if self.config["notification_sound"]:
-            winsound.Beep(1000, 500)  # Windows beep sound
+            if os.name == 'nt':  # Windows
+                import winsound
+                winsound.Beep(1000, 500)
+            else:  # macOS/Linux
+                os.system('afplay /System/Library/Sounds/Ping.aiff')
 
         is_break = self.session_label.cget("text").endswith("Break")
 
