@@ -138,12 +138,18 @@ class PomodoroApp:
             self.timer_completed()
 
     def timer_completed(self):
+        def sound_play(x):
+            for i in range(4):
+                x.play()
         if self.config["notification_sound"]:
             if os.name == 'nt':  # Windows
-                import winsound
-                winsound.Beep(1000, 500)
+                for i in range(3):
+                    import winsound
+                    winsound.Beep(1000, 500)
+                    time.sleep(0.3)
             else:  # macOS/Linux
-                os.system('afplay /System/Library/Sounds/Ping.aiff')
+                for i in range(3):
+                    os.system('afplay /System/Library/Sounds/Glass.aiff')
 
         is_break = self.session_label.cget("text").endswith("Break")
 
